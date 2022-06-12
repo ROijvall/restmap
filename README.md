@@ -1,2 +1,0 @@
-# B
-Big gains inc
