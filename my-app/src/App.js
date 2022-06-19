@@ -44,8 +44,6 @@ function Program() {
   return (
     <main className="App">
       <header className="App-header">
-        <p>content here</p>
-
         <Link to="/">
           <button type="button" className="button1">
             Home
