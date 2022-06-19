@@ -5,7 +5,7 @@ class Tmp extends React.Component {
     
     constructor(props) {
         super(props);
-        this.state = { k_copy: this.props.k, v_copy: this.props.v, k: this.props.k, v: this.props.v  };
+        this.state = { k_copy: this.props.k, v_copy: this.props.v, k: this.props.k, v: this.props.v, simple: this.props.simple  };
 
         this.handleChange = this.handleChange.bind(this);
       }
@@ -21,8 +21,29 @@ class Tmp extends React.Component {
 
 
     render() {
-        return (
-            <div>
+        if (this.state.simple) {
+            return (
+                <div>
+                    <a>{this.state.k}: </a>
+                    <input
+                        name="k_copy"
+                        type="text"
+                        value={this.state.k_copy}
+                        onChange={this.handleChange}
+                    />
+                    <br/>
+                    <a className='valueText'>{this.state.v}: </a>
+                    <input
+                        name="v_copy"
+                        type="text"
+                        value={this.state.v_copy}
+                        onChange={this.handleChange}
+                    />
+                </div>
+            );
+        } else {
+            return (
+                <div>
                 <a>{this.state.k}: </a>
                 <input
                     name="k_copy"
@@ -31,15 +52,10 @@ class Tmp extends React.Component {
                     onChange={this.handleChange}
                 />
                 <br/>
-                <a className='valueText'>{this.state.v}: </a>
-                <input
-                    name="v_copy"
-                    type="text"
-                    value={this.state.v_copy}
-                    onChange={this.handleChange}
-                />
-             </div>
-         );
+                <a> {this.state.v} </a>
+                </div>
+            );
+        }
     }
 }
 

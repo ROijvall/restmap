@@ -23,15 +23,16 @@ class top {
 
   toTmp () {
     var res = [];
-    if (!this.simpleValue && this.values) {
-      var keys = Object.keys(this.values)
-      console.log(this.values);
-      this.values.forEach(element => {
-        res.push(element.toTmp());
-      });
-      return <Tmp key={id++} k={this.key} v={res}/>;
-    } else if (this.values) {
-      return <Tmp key={id++} k={this.key} v={this.values}/>;
+    if (this.values && this.key) {
+      if (!this.simpleValue && this.values) {
+        var keys = Object.keys(this.values)
+        this.values.forEach(element => {
+          res.push(element.toTmp());
+        });
+        return <Tmp key={id++} k={this.key} v={res} simple={false}/>;
+      } else {
+        return <Tmp key={id++} k={this.key} v={this.values} simple={true}/>;
+      }
     }
   }
 
@@ -73,20 +74,6 @@ class Form extends React.Component {
 
     this.setState({ keys: tmplist, showComponent: true });
     event.preventDefault();
-  }
-
-  recursive(key, value) {
-    var res = []
-    if (key) {
-      if (typeof(value) == Array) {
-        value.map((key, value) => {
-            res.push(this.recursive(key, value));
-          });
-          return res;
-      } else {
-           return <Tmp key={id++} k={key} v={value}/>
-      }
-    } 
   }
 
   render() {
