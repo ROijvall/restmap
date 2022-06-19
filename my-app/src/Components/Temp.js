@@ -8,7 +8,6 @@ class Tmp extends React.Component {
         this.state = { k_copy: this.props.k, v_copy: this.props.v, k: this.props.k, v: this.props.v  };
 
         this.handleChange = this.handleChange.bind(this);
-        //this.handleChangeValue = this.handleChangeValue.bind(this);
       }
 
       handleChange(event) {
@@ -23,7 +22,7 @@ class Tmp extends React.Component {
 
     render() {
         return (
-            <div className='keyInput'>
+            <div>
                 <a>{this.state.k}: </a>
                 <input
                     name="k_copy"

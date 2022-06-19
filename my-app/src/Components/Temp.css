@@ -1,3 +1,4 @@
 a.valueText {
+    text-align: match-parent;
     margin-left: 50px;
 }

@@ -1,6 +1,42 @@
 import React from 'react';
 import Tmp from './Temp';
 
+let id = 0;
+
+class top {
+  constructor(key, values) {
+    this.key = key;
+    if (typeof(values) === 'string') {
+      this.values = values;
+      this.simpleValue = true;
+    } else  {
+      var tmp = []
+      
+      var keys = Object.keys(values)
+      keys.forEach(element => {
+        tmp.push(new top(element, values[element]));
+      });
+      this.values = tmp;
+      this.simpleValue = false;
+    }
+  }
+
+  toTmp () {
+    var res = [];
+    if (!this.simpleValue && this.values) {
+      var keys = Object.keys(this.values)
+      console.log(this.values);
+      this.values.forEach(element => {
+        res.push(element.toTmp());
+      });
+      return <Tmp key={id++} k={this.key} v={res}/>;
+    } else if (this.values) {
+      return <Tmp key={id++} k={this.key} v={this.values}/>;
+    }
+  }
+
+}
+
 class Form extends React.Component {
   constructor(props) {
     super(props);
@@ -15,18 +51,42 @@ class Form extends React.Component {
   }
 
   handleSubmit(event) {
-    var rows = [];
-    var i = 0;
+    var objlist = [];
     try {
-      JSON.parse(this.state.value, (key, value) => 
-        key ? rows.push(<Tmp key={i++} k={key} v={value}/>) : value);
+      var jsonObj = JSON.parse(this.state.value);
     } catch (e) {
       alert('Invalid json: ' + this.state.value);
       this.setState({ showComponent: false });
       return;
     }
-    this.setState({ keys: rows, showComponent: true });
+
+    for (const key in jsonObj) {
+      objlist.push(new top(key, jsonObj[key]));
+    }
+    console.log(objlist);
+
+    var tmplist = [];
+    objlist.forEach(element => {
+      tmplist.push(element.toTmp());
+    });
+    console.log(tmplist); 
+
+    this.setState({ keys: tmplist, showComponent: true });
     event.preventDefault();
+  }
+
+  recursive(key, value) {
+    var res = []
+    if (key) {
+      if (typeof(value) == Array) {
+        value.map((key, value) => {
+            res.push(this.recursive(key, value));
+          });
+          return res;
+      } else {
+           return <Tmp key={id++} k={key} v={value}/>
+      }
+    } 
   }
 
   render() {
