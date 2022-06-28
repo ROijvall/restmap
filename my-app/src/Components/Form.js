@@ -6,30 +6,33 @@ let id = 0;
 class top {
   constructor(key, values) {
     this.key = key;
+    var result = [];
+    this.simpleValue = false;
     if (typeof(values) === 'string') {
       this.values = values;
       this.simpleValue = true;
-    } else  {
-      var tmp = []
-      
+    } else if (Array.isArray(values)) {
+      values.forEach(element => {
+        result.push(new top(null, element));
+      })
+      this.values = result;
+    } else {
       var keys = Object.keys(values)
       keys.forEach(element => {
-        tmp.push(new top(element, values[element]));
+        result.push(new top(element, values[element]));
       });
-      this.values = tmp;
-      this.simpleValue = false;
+      this.values = result;
     }
   }
 
   toTmp () {
-    var res = [];
-    if (this.values && this.key) {
-      if (!this.simpleValue && this.values) {
-        var keys = Object.keys(this.values)
+    var result = [];
+    if (this.values) {
+      if (!this.simpleValue) {
         this.values.forEach(element => {
-          res.push(element.toTmp());
+          result.push(element.toTmp());
         });
-        return <Tmp key={id++} k={this.key} v={res} simple={false}/>;
+        return <Tmp key={id++} k={this.key} v={result} simple={false}/>;
       } else {
         return <Tmp key={id++} k={this.key} v={this.values} simple={true}/>;
       }
@@ -41,38 +44,32 @@ class top {
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: '{ "name": "debug" }', showComponent: false, keys: null, values: ['debug'] };
+    this.state = { input: '{ "name": "debug" }', showComponent: false, output: null };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ value: event.target.value });
+    this.setState({ input: event.target.value });
   }
 
   handleSubmit(event) {
-    var objlist = [];
     try {
-      var jsonObj = JSON.parse(this.state.value);
+      var jsonObj = JSON.parse(this.state.input);
     } catch (e) {
-      alert('Invalid json: ' + this.state.value);
+      alert('Invalid json: ' + this.state.input);
       this.setState({ showComponent: false });
       return;
     }
 
-    for (const key in jsonObj) {
-      objlist.push(new top(key, jsonObj[key]));
-    }
-    console.log(objlist);
+    var asArray = Object.entries(jsonObj);
+    var result = []
+    asArray.forEach(entry => {;
+      result.push((new top(entry[0], entry[1])).toTmp());
+    })
 
-    var tmplist = [];
-    objlist.forEach(element => {
-      tmplist.push(element.toTmp());
-    });
-    console.log(tmplist); 
-
-    this.setState({ keys: tmplist, showComponent: true });
+    this.setState({ output: result, showComponent: true });
     event.preventDefault();
   }
 
@@ -84,7 +81,7 @@ class Form extends React.Component {
           Input json:
           <input
             type="text"
-            value={this.state.value}
+            value={this.state.input}
             onChange={this.handleChange}
           />
         </label>
@@ -92,7 +89,7 @@ class Form extends React.Component {
 
       </form>
         <div>
-          {this.state.showComponent ? <div>{this.state.keys}</div> : null}
+          {this.state.showComponent ? <div>{this.state.output}</div> : null}
         </div>
       </div>
 

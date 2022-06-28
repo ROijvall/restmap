@@ -21,7 +21,7 @@ class Tmp extends React.Component {
 
 
     render() {
-        if (this.state.simple) {
+        if (this.state.simple && this.state.k) {
             return (
                 <div>
                     <a>{this.state.k}: </a>
@@ -41,6 +41,18 @@ class Tmp extends React.Component {
                     />
                 </div>
             );
+        } else if (this.state.k === null) {
+            return (
+                <div>
+                    <a className='valueText'>{this.state.v}: </a>
+                    <input
+                        name="v_copy"
+                        type="text"
+                        value={this.state.v_copy}
+                        onChange={this.handleChange}
+                    />
+                </div>
+            )
         } else {
             return (
                 <div>
