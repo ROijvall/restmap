@@ -1,4 +1,17 @@
-a.valueText {
-    text-align: match-parent;
-    margin-left: 50px;
+.container {
+    height: 100%;
+    padding-left: 30px;
+    text-align: left;
+    padding-top: 2px;
 }
+
+.container input {
+    border: none;
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+    padding: none;
+    width: auto;
+    background-color: #282c34;
+    color: rgb(192, 181, 161);
+  }

@@ -23,8 +23,8 @@ class Tmp extends React.Component {
     render() {
         if (this.state.simple && this.state.k) {
             return (
-                <div>
-                    <a>{this.state.k}: </a>
+                <div className="container">
+                    <a className="keyText">{this.state.k}: </a>
                     <input
                         name="k_copy"
                         type="text"
@@ -32,18 +32,20 @@ class Tmp extends React.Component {
                         onChange={this.handleChange}
                     />
                     <br/>
-                    <a className='valueText'>{this.state.v}: </a>
-                    <input
-                        name="v_copy"
-                        type="text"
-                        value={this.state.v_copy}
-                        onChange={this.handleChange}
-                    />
+                    <div className='container'>
+                        <a className='valueText'>{this.state.v}: </a>
+                        <input
+                            name="v_copy"
+                            type="text"
+                            value={this.state.v_copy}
+                            onChange={this.handleChange}
+                        />
+                    </div>
                 </div>
             );
         } else if (this.state.k === null) {
             return (
-                <div>
+                <div className="container">
                     <a className='valueText'>{this.state.v}: </a>
                     <input
                         name="v_copy"
@@ -55,8 +57,8 @@ class Tmp extends React.Component {
             )
         } else {
             return (
-                <div>
-                <a>{this.state.k}: </a>
+                <div className="container">
+                <a className="keyText">{this.state.k}: </a>
                 <input
                     name="k_copy"
                     type="text"

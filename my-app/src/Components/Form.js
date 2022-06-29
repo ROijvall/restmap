@@ -47,14 +47,20 @@ class Form extends React.Component {
     this.state = { input: '{ "name": "debug" }', showComponent: false, output: null };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.handleSave = this.handleSave.bind(this);
   }
 
   handleChange(event) {
     this.setState({ input: event.target.value });
   }
 
-  handleSubmit(event) {
+  handleSave(event) {
+    //var asArray = Object.entries(this.state.output);
+    console.log(this.state.output);
+  }
+
+  handleInput(event) {
     try {
       var jsonObj = JSON.parse(this.state.input);
     } catch (e) {
@@ -76,7 +82,7 @@ class Form extends React.Component {
   render() {
     return (
       <div>
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleInput}>
         <label>
           Input json:
           <input
@@ -88,8 +94,15 @@ class Form extends React.Component {
         <input type="submit" value="Submit" />
 
       </form>
-        <div>
-          {this.state.showComponent ? <div>{this.state.output}</div> : null}
+        <div className="flexContainer">
+          {this.state.showComponent ? 
+            <div>
+              <form onSubmit={this.handleSave}>
+                {this.state.output}
+                <input type="button" onClick={this.handleSave} value="Save"></input>
+              </form>
+            </div> 
+            : null}
         </div>
       </div>
 
