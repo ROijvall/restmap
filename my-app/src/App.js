@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import Form from './Components/Form';
+import { Provider } from 'react-redux'
 
 function Home() {
   return (
@@ -49,7 +50,7 @@ function Program() {
             Home
           </button>
         </Link>
-        <Form />
+        <Form />  
       </header>
     </main>
   );
@@ -57,13 +58,13 @@ function Program() {
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/program" element={<Program />} />
-      </Routes>
-    </div>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/program" element={<Program />} />
+        </Routes>
+      </div>
   );
 }
 

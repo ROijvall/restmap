@@ -1,11 +1,21 @@
-import React from 'react';
 import Tmp from './Temp';
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  add,
+  changeKey,
+  changeValue,
+  selectTops
+} from '../topSlice'
 
 let id = 0;
+
 
 class top {
   constructor(key, values) {
     this.key = key;
+    this.k_copy = key;
+    this.v_copy = values; 
     var result = [];
     this.simpleValue = false;
     if (typeof(values) === 'string') {
@@ -25,89 +35,126 @@ class top {
     }
   }
 
-  toTmp (stack) {
+  /*toTmp (stack) {
     var result = [];
     if (this.values) {
       if (!this.simpleValue) {
+        stack.push(this.key);
         this.values.forEach(element => {
-          result.push(element.toTmp(stack.push(this.key)));
+          result.push(element.toTmp(stack));
         });
         return <Tmp key={id++} k={this.key} v={result} stack={stack} simple={false}/>;
       } else {
+        stack.push(this.key);
         return <Tmp key={id++} k={this.key} v={this.values} stack={stack} simple={true}/>;
       }
     }
-  }
+  }*/
 
 }
 
-class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { input: '{ "name": "debug" }', showComponent: false, output: null };
+const Form = props => {
+  
+  //const tops = useSelector(selectTops);
+  const dispatch = useDispatch();
+  const [json, setJson] = useState('{ "name": "debug" }');
+  const [tops, setTops] = useState([]);
+  const [output, setOutput] = useState(null);
+  const [showComponent, setShowComponent] = useState(false);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+  const onChangeHandler = event => {
+    setJson(event.target.value);
+    event.preventDefault();
+ };
+
+  const handleSave = (event) => {
+    console.log("hej");
+    event.preventDefault();
   }
 
-  handleChange(event) {
-    this.setState({ input: event.target.value });
-  }
-
-  handleSave(event) {
-    //var asArray = Object.entries(this.state.output);
-    console.log(this.state.output);
-  }
-
-  handleInput(event) {
+  const handleInput = event => {
     try {
-      var jsonObj = JSON.parse(this.state.input);
+      var jsonObj = JSON.parse(json);
     } catch (e) {
-      alert('Invalid json: ' + this.state.input);
-      this.setState({ showComponent: false });
+      alert('Invalid json: ' + json);
+      setShowComponent(false);
       return;
     }
 
     var asArray = Object.entries(jsonObj);
     var result = []
     asArray.forEach(entry => {;
-      result.push((new top(entry[0], entry[1])).toTmp([]));
+      result.push((new top(entry[0], entry[1])));
     })
+    setTops(result);
 
-    this.setState({ output: result, showComponent: true });
+    var tmpResult = []
+    result.forEach(entry => {;
+      tmpResult.push(toTmp(entry, []));
+    })
+    dispatch(add(jsonObj));
+    setOutput(tmpResult);
+    setShowComponent(true);
     event.preventDefault();
-  }
+  };
 
-  render() {
+  const toTmp = (top, stack) => {
+    console.log(top);
+    var result = [];
+    if (top) {
+      if (!top.simpleValue) {
+        stack.push(top.key);
+        top.values.forEach(element => {
+            result.push(toTmp(element, stack));
+          });
+          return <Tmp key={id++} k={top.key} v={result} stack={stack} simple={false} />;
+        } else {
+          stack.push(top.key);
+          return <Tmp key={id++} k={top.key} v={top.values} stack={stack} simple={true} />;
+        }
+      }
+    };
+
     return (
       <div>
-      <form onSubmit={this.handleInput}>
-        <label>
-          Input json:
-          <input
-            type="text"
-            value={this.state.input}
-            onChange={this.handleChange}
-          />
-        </label>
-        <input type="submit" value="Submit" />
-
-      </form>
+        <form onSubmit={handleInput}>
+          <label>
+            Input json:
+            <input
+              type="text"
+              value={json}
+              onChange={onChangeHandler}
+            />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
         <div className="flexContainer">
-          {this.state.showComponent ? 
+          {showComponent ? 
             <div>
-              <form onSubmit={this.handleSave}>
-                {this.state.output}
-                <input type="button" onClick={this.handleSave} value="Save"></input>
+              <form onSubmit={handleSave}>
+                {output}
+                <input type="button" onClick={handleSave} value="Save"></input>
               </form>
             </div> 
             : null}
         </div>
-      </div>
-
+      </div>              
     );
-  }
 }
 
 export default Form;
+
+
+/*
+<div>
+              <form onSubmit={handleSave}>
+                            {tops}
+                <input type="button" onClick={handleSave} value="Save"></input>
+              </form>
+            </div>
+*/
+
+/*
+        <div className="flexContainer">
+          {showComponent ? {tops} : null}
+        </div>*/

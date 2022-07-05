@@ -1,76 +1,83 @@
-import React from 'react';
+import React, { useState } from 'react'
 import './Temp.css';
 
-class Tmp extends React.Component { 
-    
-    constructor(props) {
+const Tmp = props => {
+    /*constructor(props) {
         super(props);
         this.state = { k_copy: this.props.k, v_copy: this.props.v };
-
+        
         this.handleChange = this.handleChange.bind(this);
-      }
-
-      handleChange(event) {
+    }*/
+    
+    /*handleChange(event) {
         const target = event.target;
         const name = target.name;
-    
+        
         this.setState({
-          [name]: target.value
+            [name]: target.value
         });
-      }
+    }*/
 
-
-    render() {
-        if (this.props.simple && this.props.k) {
-            return (
-                <div className="container">
-                    <a className="keyText">{this.props.k}: </a>
-                    <input
-                        name="k_copy"
-                        type="text"
-                        value={this.state.k_copy}
-                        onChange={this.handleChange}
-                    />
-                    <br/>
-                    <div className='container'>
-                        <a className='valueText'>{this.props.v}: </a>
-                        <input
-                            name="v_copy"
-                            type="text"
-                            value={this.state.v_copy}
-                            onChange={this.handleChange}
-                        />
-                    </div>
-                </div>
+    const onChangeKey = event => {
+        setNewKey(event.target.value);
+     };
+     
+    const onChangeValue = event => {
+        setNewValue(event.target.value);
+     };
+    
+    const [k_copy, setNewKey] = useState(props.k);
+    const [v_copy, setNewValue] = useState(props.v);
+    
+    if (props.simple && props.k) {
+        return (
+            <div className="container">
+            <a className="keyText">{props.k}: </a>
+            <input
+            name="k_copy"
+            type="text"
+            value={k_copy}
+            onChange={onChangeKey}
+            />
+            <br/>
+            <div className='container'>
+            <a className='valueText'>{props.v}: </a>
+            <input
+            name="v_copy"
+            type="text"
+            value={v_copy}
+            onChange={onChangeValue}
+            />
+            </div>
+            </div>
             );
-        } else if (this.props.k === null) {
+        } else if (props.k === null) {
             return (
                 <div className="container">
-                    <a className='valueText'>{this.props.v}: </a>
-                    <input
-                        name="v_copy"
-                        type="text"
-                        value={this.state.v_copy}
-                        onChange={this.handleChange}
-                    />
-                </div>
-            )
-        } else {
-            return (
-                <div className="container">
-                <a className="keyText">{this.props.k}: </a>
+                <a className='valueText'>{props.v}: </a>
                 <input
+                name="v_copy"
+                type="text"
+                value={v_copy}
+                onChange={onChangeValue}
+                />
+                </div>
+                )
+            } else {
+                return (
+                    <div className="container">
+                    <a className="keyText">{props.k}: </a>
+                    <input
                     name="k_copy"
                     type="text"
-                    value={this.state.k_copy}
-                    onChange={this.handleChange}
-                />
-                <br/>
-                <a> {this.props.v} </a>
-                </div>
-            );
-        }
-    }
-}
-
-export default Tmp;
+                    value={k_copy}
+                    onChange={onChangeKey}
+                    />
+                    <br/>
+                    <a> {props.v} </a>
+                    </div>
+                    );
+                }
+            }
+            
+            export default Tmp;
