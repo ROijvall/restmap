@@ -5,7 +5,7 @@ class Tmp extends React.Component {
     
     constructor(props) {
         super(props);
-        this.state = { k_copy: this.props.k, v_copy: this.props.v, k: this.props.k, v: this.props.v, simple: this.props.simple  };
+        this.state = { k_copy: this.props.k, v_copy: this.props.v };
 
         this.handleChange = this.handleChange.bind(this);
       }
@@ -21,10 +21,10 @@ class Tmp extends React.Component {
 
 
     render() {
-        if (this.state.simple && this.state.k) {
+        if (this.props.simple && this.props.k) {
             return (
                 <div className="container">
-                    <a className="keyText">{this.state.k}: </a>
+                    <a className="keyText">{this.props.k}: </a>
                     <input
                         name="k_copy"
                         type="text"
@@ -33,7 +33,7 @@ class Tmp extends React.Component {
                     />
                     <br/>
                     <div className='container'>
-                        <a className='valueText'>{this.state.v}: </a>
+                        <a className='valueText'>{this.props.v}: </a>
                         <input
                             name="v_copy"
                             type="text"
@@ -43,10 +43,10 @@ class Tmp extends React.Component {
                     </div>
                 </div>
             );
-        } else if (this.state.k === null) {
+        } else if (this.props.k === null) {
             return (
                 <div className="container">
-                    <a className='valueText'>{this.state.v}: </a>
+                    <a className='valueText'>{this.props.v}: </a>
                     <input
                         name="v_copy"
                         type="text"
@@ -58,7 +58,7 @@ class Tmp extends React.Component {
         } else {
             return (
                 <div className="container">
-                <a className="keyText">{this.state.k}: </a>
+                <a className="keyText">{this.props.k}: </a>
                 <input
                     name="k_copy"
                     type="text"
@@ -66,7 +66,7 @@ class Tmp extends React.Component {
                     onChange={this.handleChange}
                 />
                 <br/>
-                <a> {this.state.v} </a>
+                <a> {this.props.v} </a>
                 </div>
             );
         }

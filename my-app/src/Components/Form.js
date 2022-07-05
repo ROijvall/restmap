@@ -25,16 +25,16 @@ class top {
     }
   }
 
-  toTmp () {
+  toTmp (stack) {
     var result = [];
     if (this.values) {
       if (!this.simpleValue) {
         this.values.forEach(element => {
-          result.push(element.toTmp());
+          result.push(element.toTmp(stack.push(this.key)));
         });
-        return <Tmp key={id++} k={this.key} v={result} simple={false}/>;
+        return <Tmp key={id++} k={this.key} v={result} stack={stack} simple={false}/>;
       } else {
-        return <Tmp key={id++} k={this.key} v={this.values} simple={true}/>;
+        return <Tmp key={id++} k={this.key} v={this.values} stack={stack} simple={true}/>;
       }
     }
   }
@@ -72,7 +72,7 @@ class Form extends React.Component {
     var asArray = Object.entries(jsonObj);
     var result = []
     asArray.forEach(entry => {;
-      result.push((new top(entry[0], entry[1])).toTmp());
+      result.push((new top(entry[0], entry[1])).toTmp([]));
     })
 
     this.setState({ output: result, showComponent: true });
