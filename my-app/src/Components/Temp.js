@@ -2,21 +2,23 @@ import React, { useState } from 'react'
 import './Temp.css';
 
 const Tmp = props => {
-    /*constructor(props) {
-        super(props);
-        this.state = { k_copy: this.props.k, v_copy: this.props.v };
-        
-        this.handleChange = this.handleChange.bind(this);
-    }*/
-    
-    /*handleChange(event) {
-        const target = event.target;
-        const name = target.name;
-        
-        this.setState({
-            [name]: target.value
-        });
-    }*/
+
+    const [k_copy, setNewKey] = useState(props.k);
+    const [v_copy, setNewValue] = useState(props.v);
+
+    const updateKeyValues = () => {
+        var k_res = [props.k, k_copy];
+        var v_res = [props.v, v_copy];
+        if (k_copy === props.k) {
+            k_res = null;   
+        }
+        if (v_copy === props.v) {
+            v_res = null;
+        }
+        return [props.stack, k_res, v_res];
+    }
+
+    props.biRef.updateKeyValues = updateKeyValues;
 
     const onChangeKey = event => {
         setNewKey(event.target.value);
@@ -26,8 +28,6 @@ const Tmp = props => {
         setNewValue(event.target.value);
      };
     
-    const [k_copy, setNewKey] = useState(props.k);
-    const [v_copy, setNewValue] = useState(props.v);
     
     if (props.simple && props.k) {
         return (

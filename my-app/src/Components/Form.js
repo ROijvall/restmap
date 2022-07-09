@@ -11,6 +11,7 @@ import {
 let id = 0;
 
 
+
 class top {
   constructor(key, values) {
     this.key = key;
@@ -34,45 +35,63 @@ class top {
       this.values = result;
     }
   }
-
-  /*toTmp (stack) {
-    var result = [];
-    if (this.values) {
-      if (!this.simpleValue) {
-        stack.push(this.key);
-        this.values.forEach(element => {
-          result.push(element.toTmp(stack));
-        });
-        return <Tmp key={id++} k={this.key} v={result} stack={stack} simple={false}/>;
-      } else {
-        stack.push(this.key);
-        return <Tmp key={id++} k={this.key} v={this.values} stack={stack} simple={true}/>;
-      }
-    }
-  }*/
-
 }
 
 const Form = props => {
-  
-  //const tops = useSelector(selectTops);
   const dispatch = useDispatch();
+  const state = useSelector(selectTops);
   const [json, setJson] = useState('{ "name": "debug" }');
-  const [tops, setTops] = useState([]);
   const [output, setOutput] = useState(null);
+  const [remppaing, setRemapped] = useState([]);
   const [showComponent, setShowComponent] = useState(false);
+  const [showComponent2, setShowComponent2] = useState(false);
 
+  async function addRule(e) {
+    e.preventDefault();
+    await fetch("http://localhost:5000/rule/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(remppaing),
+    })
+    .catch(error => {
+      window.alert(error);
+      return;
+    });
+  
+  }
+  
   const onChangeHandler = event => {
     setJson(event.target.value);
     event.preventDefault();
- };
-
+  };
+  
+  const unTmp = (input, changedEntries) => {
+    input.forEach(element => {
+      var resArray = element.props.biRef.updateKeyValues();
+      if (!element.props.simple) {
+        unTmp(element.props.v, changedEntries);
+      }  
+      if (resArray[1]) {
+        changedEntries.push([resArray[0], resArray[1], null]);
+      }
+    });
+    return changedEntries;
+  }
+  
   const handleSave = (event) => {
-    console.log("hej");
+    var changedEntries = []
+    unTmp(output, changedEntries);
+    console.log(changedEntries);
+    setRemapped(changedEntries);
+    setShowComponent2(true);    
+    addRule()
     event.preventDefault();
   }
-
-  const handleInput = event => {
+  
+  const handleConvert = event => {
+    console.log(json);
     try {
       var jsonObj = JSON.parse(json);
     } catch (e) {
@@ -80,81 +99,119 @@ const Form = props => {
       setShowComponent(false);
       return;
     }
-
+    
+    remppaing.forEach(element => {
+      var obj = null;
+      if (element[0].length === 0 ) {
+        obj = jsonObj;
+      } else {
+        obj = jsonObj[element[0]];
+      }
+      
+      for (var i = 1; i < element[0].length; ++i) {
+        obj = obj[element[0][i]];
+      }
+      console.log("before");
+      console.log(obj);
+      var oldKey = element[1][0], newKey = element[1][1];
+      if (element[1]) {
+        delete Object.assign(obj, {[newKey]: obj[oldKey] })[oldKey];
+      }
+    });
+    console.log(jsonObj); 
+    var res = JSON.stringify(jsonObj);
+    console.log(res);
+  }
+  
+  const handleInput = event => {
+    setShowComponent2(false);    
+    try {
+      var jsonObj = JSON.parse(json);
+    } catch (e) {
+      alert('Invalid json: ' + json);
+      setShowComponent(false);
+      return;
+    }
+    
     var asArray = Object.entries(jsonObj);
     var result = []
     asArray.forEach(entry => {;
       result.push((new top(entry[0], entry[1])));
     })
-    setTops(result);
-
+    
     var tmpResult = []
     result.forEach(entry => {;
       tmpResult.push(toTmp(entry, []));
     })
-    dispatch(add(jsonObj));
     setOutput(tmpResult);
     setShowComponent(true);
     event.preventDefault();
   };
-
+  
   const toTmp = (top, stack) => {
-    console.log(top);
+    var biRef = {
+      parentfunction: null
+    };
     var result = [];
     if (top) {
       if (!top.simpleValue) {
-        stack.push(top.key);
         top.values.forEach(element => {
-            result.push(toTmp(element, stack));
-          });
-          return <Tmp key={id++} k={top.key} v={result} stack={stack} simple={false} />;
-        } else {
-          stack.push(top.key);
-          return <Tmp key={id++} k={top.key} v={top.values} stack={stack} simple={true} />;
-        }
+          const stackCopy = [...stack];
+          stackCopy.push(top.key)
+          result.push(toTmp(element, stackCopy));
+        });
+        return <Tmp key={id++} k={top.key} v={result} stack={stack} simple={false} biRef={biRef} />;
+      } else {
+        //stack.push(top.key);
+        return <Tmp key={id++} k={top.key} v={top.values} stack={stack} simple={true} biRef={biRef} />;
       }
-    };
-
-    return (
+    }
+  };
+  
+  
+  return (
+    <div>
+    <form onSubmit={handleInput}>
+    <label>
+    Input json:
+    <input
+    type="text"
+    value={json}
+    onChange={onChangeHandler}
+    />
+    </label>
+    <input type="submit" value="Submit" />
+    </form>
+    <div className="flexContainer">
+    {showComponent ? 
       <div>
-        <form onSubmit={handleInput}>
-          <label>
-            Input json:
-            <input
-              type="text"
-              value={json}
-              onChange={onChangeHandler}
-            />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-        <div className="flexContainer">
-          {showComponent ? 
-            <div>
-              <form onSubmit={handleSave}>
-                {output}
-                <input type="button" onClick={handleSave} value="Save"></input>
-              </form>
-            </div> 
-            : null}
-        </div>
-      </div>              
-    );
-}
-
-export default Form;
-
-
-/*
-<div>
-              <form onSubmit={handleSave}>
-                            {tops}
-                <input type="button" onClick={handleSave} value="Save"></input>
-              </form>
-            </div>
-*/
-
-/*
-        <div className="flexContainer">
-          {showComponent ? {tops} : null}
-        </div>*/
+      <form onSubmit={handleSave}>
+      {output}
+      <input type="button" onClick={handleSave} value="Save"></input>
+      </form>
+      </div> 
+      : null}
+      </div>
+      {showComponent2 ?
+        <button onClick={handleConvert}>Convert</button>
+        : null}
+        </div>              
+        );
+      }
+      
+      export default Form;
+      
+      
+      /*
+      <div>
+      <form onSubmit={handleSave}>
+      {tops}
+      <input type="button" onClick={handleSave} value="Save"></input>
+      </form>
+      </div>
+      */
+      
+      /*
+      <div className="flexContainer">
+      {showComponent ? {tops} : null}
+      </div>*/
