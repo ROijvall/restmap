@@ -2,7 +2,6 @@ import './App.css';
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import Form from './Components/Form';
-import { Provider } from 'react-redux'
 
 function Home() {
   return (

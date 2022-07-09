@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import './Temp.css';
 
 const Tmp = props => {
-
     const [k_copy, setNewKey] = useState(props.k);
     const [v_copy, setNewValue] = useState(props.v);
 

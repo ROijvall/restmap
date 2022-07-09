@@ -1,16 +1,6 @@
 import Tmp from './Temp';
 import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import {
-  add,
-  changeKey,
-  changeValue,
-  selectTops
-} from '../topSlice'
-
 let id = 0;
-
-
 
 class top {
   constructor(key, values) {
@@ -38,8 +28,6 @@ class top {
 }
 
 const Form = props => {
-  const dispatch = useDispatch();
-  const state = useSelector(selectTops);
   const [json, setJson] = useState('{ "name": "debug" }');
   const [output, setOutput] = useState(null);
   const [remppaing, setRemapped] = useState([]);
@@ -83,10 +71,9 @@ const Form = props => {
   const handleSave = (event) => {
     var changedEntries = []
     unTmp(output, changedEntries);
-    console.log(changedEntries);
     setRemapped(changedEntries);
     setShowComponent2(true);    
-    addRule()
+    addRule();
     event.preventDefault();
   }
   
@@ -162,7 +149,6 @@ const Form = props => {
         });
         return <Tmp key={id++} k={top.key} v={result} stack={stack} simple={false} biRef={biRef} />;
       } else {
-        //stack.push(top.key);
         return <Tmp key={id++} k={top.key} v={top.values} stack={stack} simple={true} biRef={biRef} />;
       }
     }
@@ -200,18 +186,3 @@ const Form = props => {
       }
       
       export default Form;
-      
-      
-      /*
-      <div>
-      <form onSubmit={handleSave}>
-      {tops}
-      <input type="button" onClick={handleSave} value="Save"></input>
-      </form>
-      </div>
-      */
-      
-      /*
-      <div className="flexContainer">
-      {showComponent ? {tops} : null}
-      </div>*/
