@@ -49,7 +49,7 @@ function Program() {
             Home
           </button>
         </Link>
-        <Form />
+        <Form />  
       </header>
     </main>
   );
@@ -57,13 +57,13 @@ function Program() {
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/program" element={<Program />} />
-      </Routes>
-    </div>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/program" element={<Program />} />
+        </Routes>
+      </div>
   );
 }
 
