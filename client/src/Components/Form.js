@@ -34,10 +34,7 @@ const Form = props => {
   const [showComponent, setShowComponent] = useState(false);
   const [showComponent2, setShowComponent2] = useState(false);
 
-  async function addRule(e) {
-    console.log(remppaing);
-    console.log(JSON.stringify(remppaing));
-    e.preventDefault();
+  async function addRule() {
     let obj = {
       name: id,
       data: remppaing
@@ -79,7 +76,7 @@ const Form = props => {
     unTmp(output, changedEntries);
     setRemapped(changedEntries);
     setShowComponent2(true);    
-    addRule(event);
+    addRule();
     event.preventDefault();
   }
   
