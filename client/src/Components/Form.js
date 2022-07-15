@@ -35,13 +35,19 @@ const Form = props => {
   const [showComponent2, setShowComponent2] = useState(false);
 
   async function addRule(e) {
+    console.log(remppaing);
+    console.log(JSON.stringify(remppaing));
     e.preventDefault();
+    let obj = {
+      name: id,
+      data: remppaing
+    }
     await fetch("http://localhost:5000/rule/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(remppaing),
+      body: JSON.stringify(obj),
     })
     .catch(error => {
       window.alert(error);
@@ -73,7 +79,7 @@ const Form = props => {
     unTmp(output, changedEntries);
     setRemapped(changedEntries);
     setShowComponent2(true);    
-    addRule();
+    addRule(event);
     event.preventDefault();
   }
   

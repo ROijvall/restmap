@@ -25,10 +25,11 @@ ruleRoutes.route("/rule/get/:name").get(function (req, res) {
         });
 });
 
-ruleRoutes.route("/rule/add").post(function (req, res) {
+ruleRoutes.route("/rule/add/").post(function (req, res) {
+    console.log("entered serverside /rule/add");
+    console.log(req.body);
     let db_connect = dbo.getDb();
     let myobj = {
-        id: ObjectId(),
         name: req.body.name,
         data: req.body.data
     }
@@ -38,7 +39,7 @@ ruleRoutes.route("/rule/add").post(function (req, res) {
             res.json(result);
           });
 });
-/* 
+/*
 // This section will help you get a list of all the records.
 recordRoutes.route("/record").get(function (req, res) {
  let db_connect = dbo.getDb("employees");
@@ -99,6 +100,6 @@ recordRoutes.route("/:id").delete((req, response) => {
    console.log("1 document deleted");
    response.json(obj);
  });
-});
- */
-module.exports = recordRoutes;
+}); */
+ 
+module.exports = ruleRoutes
