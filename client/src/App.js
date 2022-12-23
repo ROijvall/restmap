@@ -1,7 +1,9 @@
 import './App.css';
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import Form from './Components/Form';
+import AddForm from './Components/AddForm';
+import GetForm from './Components/GetForm';
+
 
 function Home() {
   return (
@@ -14,9 +16,14 @@ function Home() {
               About us
             </button>
           </Link>
-          <Link to="/program">
+          <Link to="/add">
             <button type="button" className="button1">
-              Program
+              Add Rule
+            </button>
+          </Link>
+          <Link to="/get">
+            <button type="button" className="button1">
+              Get Rule
             </button>
           </Link>
         </nav>
@@ -40,7 +47,7 @@ function About() {
   );
 }
 
-function Program() {
+function Add() {
   return (
     <main className="App">
       <header className="App-header">
@@ -49,7 +56,22 @@ function Program() {
             Home
           </button>
         </Link>
-        <Form />  
+        <AddForm />  
+      </header>
+    </main>
+  );
+}
+
+function Get() {
+  return (
+    <main className="App">
+      <header className="App-header">
+        <Link to="/">
+          <button type="button" className="button1">
+            Home
+          </button>
+        </Link>
+        <GetForm />  
       </header>
     </main>
   );
@@ -61,7 +83,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/program" element={<Program />} />
+          <Route path="/add" element={<Add />} />
+          <Route path="/get" element={<Get />} />
         </Routes>
       </div>
   );
