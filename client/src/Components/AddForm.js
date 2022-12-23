@@ -4,6 +4,8 @@ let id = 0;
 
 class top {
   constructor(key, values) {
+    console.log(key)
+    console.log(values)
     this.key = key;
     this.k_copy = key;
     this.v_copy = values; 
@@ -19,39 +21,39 @@ class top {
       this.values = null;
       this.simpleValue = true;
     }
+    console.log(this);
   }
 }
 
-const Form = props => {
+const AddForm = props => {
   const [json, setJson] = useState('{ "name": "debug" }');
   const [output, setOutput] = useState(null);
-  const [remppaing, setRemapped] = useState([]);
+  //const [remppaing, setRemapped] = useState([]);
   const [showComponent, setShowComponent] = useState(false);
-  const [showComponent2, setShowComponent2] = useState(false);
   
-  async function addRule() {
-    let obj = {
-      name: id,
-      data: remppaing
-    }
-    await fetch("http://localhost:5000/rule/add", {
+  async function addRule(data) {
+    const response = await fetch("http://localhost:5000/rule/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(obj),
+    body: JSON.stringify(data),
   })
   .catch(error => {
     window.alert(error);
     return;
+  }); 
+  response.json().then(data => {
+    if (data.success) {
+      alert("Added rule: " + data.result)
+    } 
+    else {
+      alert("Failed to add rule: " + data.error)
+    }
+  }).catch(e => {
+    alert("Something went wrong: " + e)
   });
-  
 }
-
-const onChangeHandler = event => {
-  setJson(event.target.value);
-  event.preventDefault();
-};
 
 const unTmp = (input, changedEntries) => {
   input.forEach(element => {
@@ -68,48 +70,16 @@ const unTmp = (input, changedEntries) => {
 
 const handleSave = (event) => {
   var changedEntries = []
+  //console.log(output)
   unTmp(output, changedEntries);
-  setRemapped(changedEntries);
-  setShowComponent2(true);    
-  addRule();
+  //console.log(changedEntries)
+  //setRemapped(changedEntries);
+  console.log(changedEntries)
+  addRule(changedEntries);
   event.preventDefault();
 }
 
-const handleConvert = event => {
-  console.log(json);
-  try {
-    var jsonObj = JSON.parse(json);
-  } catch (e) {
-    alert('Invalid json: ' + json);
-    setShowComponent(false);
-    return;
-  }
-  
-  remppaing.forEach(element => {
-    var obj = null;
-    if (element[0].length === 0 ) {
-      obj = jsonObj;
-    } else {
-      obj = jsonObj[element[0]];
-    }
-    
-    for (var i = 1; i < element[0].length; ++i) {
-      obj = obj[element[0][i]];
-    }
-    console.log("before");
-    console.log(obj);
-    var oldKey = element[1][0], newKey = element[1][1];
-    if (element[1]) {
-      delete Object.assign(obj, {[newKey]: obj[oldKey] })[oldKey];
-    }
-  });
-  console.log(jsonObj); 
-  var res = JSON.stringify(jsonObj);
-  console.log(res);
-}
-
 const handleInput = event => {
-  setShowComponent2(false);    
   try {
     var jsonObj = JSON.parse(json);
   } catch (e) {
@@ -117,13 +87,14 @@ const handleInput = event => {
     setShowComponent(false);
     return;
   }
-  
+  console.log(jsonObj)
   var asArray = Object.entries(jsonObj);
   var result = []
+  console.log(asArray)
   asArray.forEach(entry => {;
-    result.push(toTmp((new top(entry[0], entry[1]), [])));
+    result.push(toTmp(new top(entry[0], entry[1]), []));
   })
- 
+  
   setOutput(result);
   setShowComponent(true);
   event.preventDefault();
@@ -135,7 +106,8 @@ const toTmp = (top, stack) => {
   };
   var result = [];
   if (top) {
-    if (!top.simpleValue) {
+    console.log(top)
+    if (!top.simpleValue && top.values) {
       top.values.forEach(element => {
         const stackCopy = [...stack];
         stackCopy.push(top.key)
@@ -154,10 +126,11 @@ return (
   <form onSubmit={handleInput}>
   <label>
   Input json:
+  <br/>
   <input
   type="text"
   value={json}
-  onChange={onChangeHandler}
+  onChange={event => setJson(event.target.value)}
   />
   </label>
   <input type="submit" value="Submit" />
@@ -172,11 +145,8 @@ return (
     </div> 
     : null}
     </div>
-    {showComponent2 ?
-      <button onClick={handleConvert}>Convert</button>
-      : null}
-      </div>              
-      );
-    }
-    
-    export default Form;
+    </div>   
+    );
+  }
+
+  export default AddForm;
