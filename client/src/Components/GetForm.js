@@ -1,4 +1,3 @@
-import Tmp from './Temp';
 import React, { useState } from 'react'
 
 const GetForm = props => {
@@ -21,6 +20,17 @@ const GetForm = props => {
     getRule(rule, jsonObj)
   } 
   
+  function replaceKeys(obj, oldKey, newKey) {
+    for (let key in obj) {
+      if (key === oldKey) {
+        obj[newKey] = obj[key];
+        delete obj[key];
+      } else if (typeof obj[key] === 'object') {
+        replaceKeys(obj[key], oldKey, newKey);
+      }
+    }
+  }
+  
   async function getRule(rule, jsonObj) {
     const response = await fetch(`http://localhost:5000/rule/get/${rule}`, {  
     method: "GET",
@@ -30,26 +40,13 @@ const GetForm = props => {
     return;
   });  
   const res = await response.json();
-  console.log(res)
+  console.log(res.result.data)
   if (res.success && res.result != null) {
     res.result.data.forEach(element => {
-      var obj = null;
-      
-      if (element[0].length === 0 ) {
-        obj = jsonObj;
-      } else {
-        obj = jsonObj[element[0]];
-      }
-      for (var i = 1; i < element[0].length; ++i) {
-        obj = obj[element[0][i]];
-      }
       var oldKey = element[1][0], newKey = element[1][1];
-      if (element[1]) {
-        delete Object.assign(obj, {[newKey]: obj[oldKey] })[oldKey];
-      }
+      replaceKeys(jsonObj, oldKey, newKey)
     });
-    console.log(res.result.data);
-    setResult(JSON.stringify(res.result.data))
+    setResult(JSON.stringify(jsonObj))
     setShowComponent(true);
   }
   else {
