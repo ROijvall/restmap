@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import './Temp.css';
+import './TextComponent.css';
 
-const Tmp = props => {
+const TextComponent = props => {
     const [k_copy, setNewKey] = useState(props.k);    
     const updateKeys = () => {
         var k_res = [props.k, k_copy];
@@ -20,7 +20,7 @@ const Tmp = props => {
     if (props.simple && props.k) {
         return (
             <div className="container">
-            <a className="keyText">{props.k}: </a>
+            <span className="keyText">{props.k}: </span>
             <input
             name="k_copy"
             type="text"
@@ -33,7 +33,7 @@ const Tmp = props => {
         else {
             return (
                 <div className="container">
-                <a className="keyText">{props.k}: </a>
+                <span className="keyText">{props.k}: </span>
                 <input
                 name="k_copy"
                 type="text"
@@ -41,10 +41,10 @@ const Tmp = props => {
                 onChange={onChangeKey}
                 />
                 <br/>
-                <a> {props.v} </a>
+                <span> {props.v} </span>
                 </div>
                 );
             }
         }
         
-        export default Tmp;
+        export default TextComponent;

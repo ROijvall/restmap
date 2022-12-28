@@ -45,10 +45,35 @@ async function getNextSequence(db, sequenceName) {
         .then(() => {
             body = myobj._id;
             res.send({ success: true, result: myobj._id, error: null });
-          })
+        })
         .catch(function(e) {
             res.send({ success: false, result: null, error: e });
         });
+    });
+    
+    ruleRoutes.route("/rule/delete/:id").get(async function (req, res) {
+        let db_connect = dbo.getDb();   
+        console.log("entered rule/delete id: " + req.params.id)
+        db_connect.collection(user + "_rules")
+        .deleteOne({_id: parseInt(req.params.id)}).then((rsp) => {
+            console.log(rsp) 
+            res.send({ success: true, error: null, result: rsp.deletedCount });
+        })
+        .catch(e => {
+            res.send({ success: false, error: e, result: 0 });
+        });
+    });
+    
+    ruleRoutes.route("/rules/get/:rules").get(async function (req, res) {
+        let db_connect = dbo.getDb();
+        let limit = parseInt(req.params.rules)     
+        console.log("in rules/get/ limit: " + limit)    
+        let cursor = await db_connect
+        .collection(user + "_rules")
+        .find().limit(limit)
+        const array = await cursor.toArray() 
+        const json = JSON.stringify(array)
+        res.send({ success: true, result: json, error: null });
     });
     
     module.exports = ruleRoutes

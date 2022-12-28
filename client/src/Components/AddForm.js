@@ -1,11 +1,9 @@
-import Tmp from './Temp';
+import TextComponent from './TextComponent';
 import React, { useState } from 'react'
 let id = 0;
 
 class top {
   constructor(key, values) {
-    console.log(key)
-    console.log(values)
     this.key = key;
     this.k_copy = key;
     this.v_copy = values; 
@@ -21,14 +19,12 @@ class top {
       this.values = null;
       this.simpleValue = true;
     }
-    console.log(this);
   }
 }
 
 const AddForm = props => {
   const [json, setJson] = useState('{ "name": "debug" }');
   const [output, setOutput] = useState(null);
-  //const [remppaing, setRemapped] = useState([]);
   const [showComponent, setShowComponent] = useState(false);
   
   async function addRule(data) {
@@ -70,11 +66,7 @@ const unTmp = (input, changedEntries) => {
 
 const handleSave = (event) => {
   var changedEntries = []
-  //console.log(output)
   unTmp(output, changedEntries);
-  //console.log(changedEntries)
-  //setRemapped(changedEntries);
-  console.log(changedEntries)
   addRule(changedEntries);
   event.preventDefault();
 }
@@ -87,10 +79,8 @@ const handleInput = event => {
     setShowComponent(false);
     return;
   }
-  console.log(jsonObj)
   var asArray = Object.entries(jsonObj);
   var result = []
-  console.log(asArray)
   asArray.forEach(entry => {;
     result.push(toTmp(new top(entry[0], entry[1]), []));
   })
@@ -106,16 +96,15 @@ const toTmp = (top, stack) => {
   };
   var result = [];
   if (top) {
-    console.log(top)
     if (!top.simpleValue && top.values) {
       top.values.forEach(element => {
         const stackCopy = [...stack];
         stackCopy.push(top.key)
         result.push(toTmp(element, stackCopy));
       });
-      return <Tmp key={id++} k={top.key} v={result} stack={stack} simple={false} biRef={biRef} />;
+      return <TextComponent key={id++} k={top.key} v={result} stack={stack} simple={false} biRef={biRef} />;
     } else {
-      return <Tmp key={id++} k={top.key} stack={stack} simple={true} biRef={biRef} />;
+      return <TextComponent key={id++} k={top.key} stack={stack} simple={true} biRef={biRef} />;
     }
   }
 };
@@ -148,5 +137,5 @@ return (
     </div>   
     );
   }
-
+  
   export default AddForm;

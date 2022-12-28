@@ -1,0 +1,25 @@
+.rule {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.rule .number {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.rule textarea {
+  flex: 1;
+  border: none;
+  font-size: 16px;
+  resize: none;
+  outline: none;
+  background-color: transparent;
+  color: #ccc;
+}
+
+.rule button {
+  margin-left: 8px;
+}

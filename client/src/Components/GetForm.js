@@ -40,7 +40,6 @@ const GetForm = props => {
     return;
   });  
   const res = await response.json();
-  console.log(res.result.data)
   if (res.success && res.result != null) {
     res.result.data.forEach(element => {
       var oldKey = element[1][0], newKey = element[1][1];
