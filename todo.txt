@@ -1,9 +1,5 @@
-Finish Get part, turn the result back to valid json
-
-Add rule display page
-
-Add ability to remove rules through display page
-
 Add some form of hash in db and use it to detect duplicate rules
+
+Add some functionality like confirmation when deleting rules, refreshing page after adding new rule etc
 
 Make it look somewhat nice
