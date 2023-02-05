@@ -7,9 +7,6 @@ const ruleRoutes = express.Router();
 
 // This will help us connect to the database
 const dbo = require("../db/conn");
-
-// This help convert the id from string to ObjectId for the _id.
-//const ObjectId = require("mongodb").ObjectId;
 const user = process.env.user;
 
 async function getNextSequence(db, sequenceName) {
@@ -20,6 +17,10 @@ async function getNextSequence(db, sequenceName) {
         );
         return sequenceDocument.value.sequence_value;
     }
+async function getRuleByValue(db, data) {
+    const document = await db.collection(user + "_rules").findOne({ data: data });
+    return document._id;
+    }   
     
     ruleRoutes.route("/rule/get/:rule").get(function (req, res) {
         let db_connect = dbo.getDb();   
@@ -40,11 +41,25 @@ async function getNextSequence(db, sequenceName) {
             _id: await getNextSequence(db_connect, user+"_counters"),
             data: req.body
         };
+        let insert = false;
         db_connect.collection(user + "_rules")
-        .insertOne(myobj)
-        .then(() => {
-            body = myobj._id;
-            res.send({ success: true, result: myobj._id, error: null });
+        .updateOne(
+            {
+                data : req.body
+            },
+            {
+                $setOnInsert: { _id: myobj._id, data: myobj.data }
+            },
+            {upsert: true}
+        )
+        .then(async (update) => {
+        
+            if (update.upsertedCount === 1) {
+                res.send({ success: true, result: myobj._id, error: null });
+            } else {
+                let ruleId = await getRuleByValue(db_connect, myobj.data)
+                res.send({ success: false, result: ruleId, error: null });
+            }
         })
         .catch(function(e) {
             res.send({ success: false, result: null, error: e });
@@ -53,10 +68,8 @@ async function getNextSequence(db, sequenceName) {
     
     ruleRoutes.route("/rule/delete/:id").get(async function (req, res) {
         let db_connect = dbo.getDb();   
-        console.log("entered rule/delete id: " + req.params.id)
         db_connect.collection(user + "_rules")
         .deleteOne({_id: parseInt(req.params.id)}).then((rsp) => {
-            console.log(rsp) 
             res.send({ success: true, error: null, result: rsp.deletedCount });
         })
         .catch(e => {
@@ -67,7 +80,6 @@ async function getNextSequence(db, sequenceName) {
     ruleRoutes.route("/rules/get/:rules").get(async function (req, res) {
         let db_connect = dbo.getDb();
         let limit = parseInt(req.params.rules)     
-        console.log("in rules/get/ limit: " + limit)    
         let cursor = await db_connect
         .collection(user + "_rules")
         .find().limit(limit)

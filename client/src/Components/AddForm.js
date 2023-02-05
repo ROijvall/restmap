@@ -2,7 +2,7 @@ import TextComponent from './TextComponent';
 import React, { useState } from 'react'
 let id = 0;
 
-class top {
+class key {
   constructor(key, values) {
     this.key = key;
     this.k_copy = key;
@@ -12,7 +12,7 @@ class top {
     if (typeof(values) !== 'string' && !Array.isArray(values)) {
       var keys = Object.keys(values)
       keys.forEach(element => {
-        result.push(new top(element, values[element]));
+        result.push(new key(element, values[element]));
       });
       this.values = result;
     } else {
@@ -42,6 +42,10 @@ const AddForm = props => {
   response.json().then(data => {
     if (data.success) {
       alert("Added rule: " + data.result)
+      window.location.reload(false);
+    } 
+    else if (data.error === null) {
+      alert("Rule already exists, use rule: " + data.result)
     } 
     else {
       alert("Failed to add rule: " + data.error)
@@ -51,11 +55,11 @@ const AddForm = props => {
   });
 }
 
-const unTmp = (input, changedEntries) => {
+const unwind = (input, changedEntries) => {
   input.forEach(element => {
     var resArray = element.props.biRef.updateKeys();
     if (!element.props.simple) {
-      unTmp(element.props.v, changedEntries);
+      unwind(element.props.v, changedEntries);
     }  
     if (resArray[1]) {
       changedEntries.push([resArray[0], resArray[1]]);
@@ -66,7 +70,11 @@ const unTmp = (input, changedEntries) => {
 
 const handleSave = (event) => {
   var changedEntries = []
-  unTmp(output, changedEntries);
+  unwind(output, changedEntries);
+  if (changedEntries.length === 0) {
+    alert("No changes detected")
+    return;
+  }
   addRule(changedEntries);
   event.preventDefault();
 }
@@ -82,7 +90,7 @@ const handleInput = event => {
   var asArray = Object.entries(jsonObj);
   var result = []
   asArray.forEach(entry => {;
-    result.push(toTmp(new top(entry[0], entry[1]), []));
+    result.push(toKey(new key(entry[0], entry[1]), []));
   })
   
   setOutput(result);
@@ -90,21 +98,21 @@ const handleInput = event => {
   event.preventDefault();
 };
 
-const toTmp = (top, stack) => {
+const toKey = (key, stack) => {
   var biRef = {
     parentfunction: null
   };
   var result = [];
-  if (top) {
-    if (!top.simpleValue && top.values) {
-      top.values.forEach(element => {
+  if (key) {
+    if (!key.simpleValue && key.values) {
+      key.values.forEach(element => {
         const stackCopy = [...stack];
-        stackCopy.push(top.key)
-        result.push(toTmp(element, stackCopy));
+        stackCopy.push(key.key)
+        result.push(toKey(element, stackCopy));
       });
-      return <TextComponent key={id++} k={top.key} v={result} stack={stack} simple={false} biRef={biRef} />;
+      return <TextComponent key={id++} k={key.key} v={result} stack={stack} simple={false} biRef={biRef} />;
     } else {
-      return <TextComponent key={id++} k={top.key} stack={stack} simple={true} biRef={biRef} />;
+      return <TextComponent key={id++} k={key.key} stack={stack} simple={true} biRef={biRef} />;
     }
   }
 };

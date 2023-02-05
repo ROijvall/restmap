@@ -1,0 +1,7 @@
+Restmap is built on a MERN stack with functionality that enables remapping the keys in JSON data. 
+
+The idea is that a user submits JSON data through the web application. The application provides a simple interface where the user can edit the keys as they wish. When ready the user saves the key remapping and the data is sent to a MongoDB collection, the user is returned a rule id which can later be used to apply the rule to any JSON data. It is also possible to browse through the rules for a given user in the application and delete any rules as needed.
+
+Follow the instructions to setup the necessary environment to run the server and client side applications: https://www.mongodb.com/languages/mern-stack-tutorial
+
+

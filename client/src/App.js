@@ -12,11 +12,6 @@ function Home() {
     <header className="App-header">
     <p>restmap</p>
     <nav>
-    <Link to="/about">
-    <button type="button" className="button1">
-    About us
-    </button>
-    </Link>
     <Link to="/add">
     <button type="button" className="button1">
     Add Rule
@@ -42,7 +37,7 @@ function Home() {
     return (
       <main className="App">
       <header className="App-header">
-      <p>yo</p>
+      <p></p>
       <Link to="/">
       <button type="button" className="button1">
       Home

@@ -1,5 +1,0 @@
-Add some form of hash in db and use it to detect duplicate rules
-
-Add some functionality like confirmation when deleting rules, refreshing page after adding new rule etc
-
-Make it look somewhat nice
