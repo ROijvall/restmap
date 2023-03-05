@@ -8,4 +8,3 @@ The one thing to configure is the database access, which is done in: server\conf
 Configure according to details provided in MongoDB, ATLAS_URI="<mongodb_access_information>"
 
 Currently the variable USER in config.env decides what MongoDB collection will be used. I.e. if the user is "Rasmus" then a collection "Rasmus_rules" will be used.
-
