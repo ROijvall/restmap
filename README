@@ -10,22 +10,22 @@ Configure according to details provided in MongoDB, ATLAS_URI="<mongodb_access_i
 Currently the variable USER in config.env decides what MongoDB collection will be used. I.e. if the user is "Rasmus" then a collection "Rasmus_rules" will be used.
 
 Starting page
-![restmap_startpage](https://user-images.githubusercontent.com/34237768/222953739-24abfed3-2946-4457-95a9-122f5939d9ed.png)
+![image](https://user-images.githubusercontent.com/34237768/222953739-24abfed3-2946-4457-95a9-122f5939d9ed.png)
 
 Add page after submitting some JSON (see resources/input.json)
-![restmap_addpage](https://user-images.githubusercontent.com/34237768/222953731-a4e9b7c2-35b8-4e8b-9a49-d0e22fa493fc.png)
+![image](https://user-images.githubusercontent.com/34237768/222953731-a4e9b7c2-35b8-4e8b-9a49-d0e22fa493fc.png)
 
 Feedback if rule is added successfully
-![restmap_rule_added](https://user-images.githubusercontent.com/34237768/222953736-9f81a837-87d6-4793-86c8-2682f747a4a3.png)
+![image](https://user-images.githubusercontent.com/34237768/222953736-9f81a837-87d6-4793-86c8-2682f747a4a3.png)
 
 If attempting to add an identical rule again the program will stop you
-![restmap_rule_exists](https://user-images.githubusercontent.com/34237768/222953737-16b1d155-02ba-493c-ae6b-fceb64e37bce.png)
+![image](https://user-images.githubusercontent.com/34237768/222953737-16b1d155-02ba-493c-ae6b-fceb64e37bce.png)
 
 The get rule page allows the user to get apply a rule to a json string, see resources/output.json
-![restmap_get](https://user-images.githubusercontent.com/34237768/222953734-6dfdb916-88db-4a61-b8b5-2a24adb665a3.png)
+![image](https://user-images.githubusercontent.com/34237768/222953734-6dfdb916-88db-4a61-b8b5-2a24adb665a3.png)
 
 It is also possible to list the existing rules within the app and delete them using the application if desired.
-![restmap_list](https://user-images.githubusercontent.com/34237768/222953735-d9364032-3643-49a6-891f-13ec9943544e.png)
+![image](https://user-images.githubusercontent.com/34237768/222953735-d9364032-3643-49a6-891f-13ec9943544e.png)
 
 
 
