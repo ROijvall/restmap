@@ -4,4 +4,8 @@ The idea is that a user submits JSON data through the web application. The appli
 
 Follow the instructions to setup the necessary environment to run the server and client side applications: https://www.mongodb.com/languages/mern-stack-tutorial
 
+The one thing to configure is the database access, which is done in: server\config.env
+Configure according to details provided in MongoDB, ATLAS_URI="<mongodb_access_information>"
+
+Currently the variable USER in config.env decides what MongoDB collection will be used. I.e. if the user is "Rasmus" then a collection "Rasmus_rules" will be used.
 

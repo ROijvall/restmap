@@ -2,7 +2,7 @@ import TextComponent from './TextComponent';
 import React, { useState } from 'react'
 let id = 0;
 
-class key {
+class Key {
   constructor(key, values) {
     this.key = key;
     this.k_copy = key;
@@ -12,7 +12,7 @@ class key {
     if (typeof(values) !== 'string' && !Array.isArray(values)) {
       var keys = Object.keys(values)
       keys.forEach(element => {
-        result.push(new key(element, values[element]));
+        result.push(new Key(element, values[element]));
       });
       this.values = result;
     } else {
@@ -90,7 +90,7 @@ const handleInput = event => {
   var asArray = Object.entries(jsonObj);
   var result = []
   asArray.forEach(entry => {;
-    result.push(toKey(new key(entry[0], entry[1]), []));
+    result.push(toKey(new Key(entry[0], entry[1]), []));
   })
   
   setOutput(result);
